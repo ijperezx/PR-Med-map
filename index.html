@@ -406,6 +406,93 @@
     .submit-status.ok{background:#f0fdf4;color:#14532d;border:1px solid #86efac}
     .submit-status.err{background:#fef2f2;color:#991b1b;border:1px solid #fca5a5}
 
+
+    /* ── Global provider search ── */
+    .search-wrap{max-width:580px;margin:0 auto;position:relative}
+    .search-hero-input{
+      width:100%;padding:14px 20px 14px 46px;border-radius:30px;border:none;
+      font-family:'DM Sans',sans-serif;font-size:15px;outline:none;
+      background:rgba(255,255,255,.12);color:#fff;
+      box-shadow:0 0 0 1.5px rgba(255,255,255,.2);
+      transition:background .2s,box-shadow .2s;
+    }
+    .search-hero-input::placeholder{color:rgba(255,255,255,.5)}
+    .search-hero-input:focus{background:rgba(255,255,255,.18);box-shadow:0 0 0 2px rgba(255,255,255,.45)}
+    .search-icon{
+      position:absolute;left:16px;top:50%;transform:translateY(-50%);
+      font-size:16px;opacity:.6;pointer-events:none;
+    }
+    .search-dropdown{
+      position:absolute;top:calc(100% + 8px);left:0;right:0;
+      background:#fff;border-radius:14px;
+      box-shadow:0 12px 40px rgba(6,17,46,.18);
+      border:1px solid var(--border);overflow:hidden;z-index:600;
+      display:none;max-height:420px;overflow-y:auto;
+    }
+    .search-dropdown.open{display:block}
+    .search-result-item{
+      display:flex;align-items:flex-start;gap:12px;
+      padding:11px 16px;cursor:pointer;border-bottom:1px solid var(--frost);
+      transition:background .1s;
+    }
+    .search-result-item:last-child{border-bottom:none}
+    .search-result-item:hover{background:var(--frost)}
+    .search-result-avatar{
+      width:36px;height:36px;border-radius:50%;flex-shrink:0;
+      background:linear-gradient(135deg,var(--cobalt),var(--mid));
+      display:flex;align-items:center;justify-content:center;
+      font-family:'DM Serif Display',serif;font-size:.85rem;color:#fff;
+      margin-top:1px;
+    }
+    .search-result-info{flex:1;min-width:0}
+    .search-result-name{font-size:13.5px;font-weight:600;color:var(--ink);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .search-result-name mark{background:none;color:var(--cobalt);font-weight:700}
+    .search-result-meta{font-size:11px;color:var(--muted);margin-top:2px}
+    .search-result-muni{
+      font-size:10px;font-weight:600;color:var(--cobalt);
+      background:var(--frost);border:1px solid var(--pale);
+      border-radius:10px;padding:2px 8px;white-space:nowrap;flex-shrink:0;margin-top:3px;
+    }
+    .search-no-results{padding:1.2rem 1.5rem;font-size:13px;color:var(--muted);text-align:center}
+    .search-result-count{
+      padding:6px 16px;font-size:10px;font-weight:700;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--muted);background:var(--bg);
+      border-bottom:1px solid var(--border);
+    }
+
+
+    /* ── Admin button ── */
+    .nav-admin-btn{background:none;border:1px solid rgba(255,255,255,.15);border-radius:7px;
+      color:rgba(255,255,255,.5);font-size:14px;width:30px;height:30px;cursor:pointer;
+      transition:all .15s;display:flex;align-items:center;justify-content:center}
+    .nav-admin-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+
+    /* ── Register extras ── */
+    .field-hint{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
+    .checkbox-label{display:flex;align-items:flex-start;gap:9px;cursor:pointer;font-size:13px;color:var(--ink);line-height:1.5}
+    .newsletter-opt{padding:.75rem;background:var(--frost);border-radius:8px;border:1px solid var(--pale)}
+    .req{color:#c0392b;margin-left:2px}
+
+    /* ── Verification card ── */
+    #verify-card{border-top:3px solid var(--cobalt)}
+
+    /* ── Admin table ── */
+    #admin-table th{background:var(--navy);color:#fff;padding:9px 12px;text-align:left;
+      font-size:11px;font-weight:600;letter-spacing:.05em;white-space:nowrap;position:sticky;top:0}
+    #admin-table td{padding:8px 12px;border-bottom:1px solid var(--frost);vertical-align:top;max-width:200px;word-break:break-word}
+    #admin-table tr:hover td{background:var(--frost)}
+    .admin-flag{background:#fef2f2;border-left:3px solid #f87171}
+    .admin-flag td{background:#fef2f2}
+    .admin-new{background:#f0fdf4;border-left:3px solid #4ade80}
+    .admin-new td{background:#f0fdf4}
+    .econsult-btn{
+      display:inline-flex;align-items:center;gap:6px;
+      background:#e5e7eb;color:#9ca3af;border:1px solid #d1d5db;
+      border-radius:8px;padding:9px 16px;font-family:'DM Sans',sans-serif;
+      font-size:12.5px;font-weight:600;cursor:not-allowed;width:100%;
+      justify-content:center;margin-top:.5rem;
+    }
   </style>
 </head>
 <body>
@@ -468,6 +555,7 @@
     <button class="nav-register-btn" onclick="showSection('register')" id="nav-register-btn">
       <span>＋</span><span id="nav-register-label"></span>
     </button>
+    <button class="nav-admin-btn" onclick="openAdmin()" title="Admin">⚙</button>
     <div class="lang-toggle">
       <button class="lang-toggle-btn" id="lt-en" onclick="setLang('en')">EN</button>
       <button class="lang-toggle-btn" id="lt-es" onclick="setLang('es')">ES</button>
@@ -480,6 +568,17 @@
   <div class="home-hero">
     <h1 id="hero-h1"></h1>
     <p id="hero-p"></p>
+    <div class="search-wrap" style="margin-top:1.8rem">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        class="search-hero-input"
+        id="provider-search"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <div class="search-dropdown" id="search-dropdown"></div>
+    </div>
   </div>
   <div class="home-stats-bar">
     <div class="home-stat"><div class="home-stat-val">78</div><div class="home-stat-lbl" id="stat-muni"></div></div>
@@ -529,6 +628,21 @@
           <div class="about-team-name">Kinesthesi LLC</div>
           <div class="about-team-role" id="about-team-role"></div>
         </div>
+        <div class="about-team-card">
+          <div class="about-team-avatar">IP</div>
+          <div class="about-team-name">Ivan Perez Vicente, MD</div>
+          <div class="about-team-role">Chief Developer · Policy Advocate · Medical Consultant</div>
+        </div>
+        <div class="about-team-card">
+          <div class="about-team-avatar">CM</div>
+          <div class="about-team-name">Coral Martes Villalobos, MD</div>
+          <div class="about-team-role">Data Miner · Outreach · Medical Consultant</div>
+        </div>
+        <div class="about-team-card">
+          <div class="about-team-avatar">GV</div>
+          <div class="about-team-name">Gustavo Vazquez Zweig, MD</div>
+          <div class="about-team-role">Front End Tester · Medical Consultant</div>
+        </div>
       </div>
     </div>
   </div>
@@ -557,7 +671,12 @@
 
 <!-- REGISTER PAGE -->
 <div id="register-page" style="display:none">
-  <div class="section-hero register-hero">
+  <!-- Back button bar -->
+  <div style="background:var(--navy);padding:.75rem 2rem;display:flex;align-items:center;justify-content:space-between">
+    <button class="nav-back-btn" style="display:flex" onclick="showSection('home')">← <span id="reg-back-label"></span></button>
+    <span style="font-size:11px;color:var(--pale);letter-spacing:.06em;text-transform:uppercase" id="reg-page-label"></span>
+  </div>
+  <div class="section-hero register-hero" style="padding:2rem 2rem 1.5rem">
     <div class="section-hero-inner">
       <h1 class="section-hero-title" id="register-hero-title"></h1>
       <p class="section-hero-sub" id="register-hero-sub"></p>
@@ -565,20 +684,32 @@
   </div>
   <div class="section-body">
     <div class="register-container">
-      <!-- Registration Form -->
+
+      <!-- STEP 1: Form -->
       <div class="register-card" id="register-form-card">
         <h2 class="register-card-title" id="reg-form-title"></h2>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:1.2rem" id="reg-required-note"></p>
 
+        <!-- Name row -->
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" id="lbl-firstname"></label>
-            <input type="text" id="reg-firstname" class="form-input"/>
+            <input type="text" id="reg-firstname" class="form-input" required placeholder="—"/>
           </div>
           <div class="form-group">
             <label class="form-label" id="lbl-lastname"></label>
-            <input type="text" id="reg-lastname" class="form-input"/>
+            <input type="text" id="reg-lastname" class="form-input" required placeholder="—"/>
           </div>
         </div>
+
+        <!-- Email — mandatory, auth only -->
+        <div class="form-group">
+          <label class="form-label" id="lbl-email"></label>
+          <input type="email" id="reg-email" class="form-input" required/>
+          <div class="field-hint" id="hint-email"></div>
+        </div>
+
+        <!-- NPI + Specialty -->
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" id="lbl-npi"></label>
@@ -586,15 +717,16 @@
           </div>
           <div class="form-group">
             <label class="form-label" id="lbl-specialty"></label>
-            <select id="reg-specialty" class="form-input" onchange="updateSubspecialtyDropdown()"></select>
+            <select id="reg-specialty" class="form-input" onchange="updateSubspecialtyDropdown()" required></select>
           </div>
         </div>
         <div class="form-group">
           <label class="form-label" id="lbl-subspecialty"></label>
-          <select id="reg-subspecialty" class="form-input"></select>
+          <select id="reg-subspecialty" class="form-input" required></select>
+          <div class="field-hint" id="hint-subspecialty"></div>
         </div>
 
-        <!-- Practice locations -->
+        <!-- Practice locations — mandatory at least one -->
         <div class="form-group">
           <label class="form-label" id="lbl-locations"></label>
           <div id="locations-list"></div>
@@ -619,11 +751,41 @@
           <textarea id="reg-flag" class="form-input form-textarea" rows="3"></textarea>
         </div>
 
+        <!-- Newsletter opt-in -->
+        <div class="form-group newsletter-opt" style="margin-top:.5rem">
+          <label class="checkbox-label">
+            <input type="checkbox" id="reg-newsletter" style="accent-color:var(--cobalt);width:15px;height:15px;flex-shrink:0"/>
+            <span id="lbl-newsletter"></span>
+          </label>
+        </div>
+        <!-- E-Consult opt-in -->
+        <div class="form-group newsletter-opt" style="margin-top:.5rem;border-color:var(--cobalt)">
+          <label class="checkbox-label">
+            <input type="checkbox" id="reg-econsult" style="accent-color:var(--cobalt);width:15px;height:15px;flex-shrink:0"/>
+            <span id="lbl-econsult"></span>
+          </label>
+        </div>
+
         <div class="form-actions">
           <button class="submit-btn" onclick="submitRegistration()" id="submit-btn"></button>
           <div id="submit-status" class="submit-status" style="display:none"></div>
         </div>
       </div>
+
+      <!-- STEP 2: Verification code -->
+      <div class="register-card" id="verify-card" style="display:none">
+        <h2 class="register-card-title" id="verify-title"></h2>
+        <p class="register-card-desc" id="verify-desc"></p>
+        <div class="npi-input-row" style="display:flex;gap:8px;margin-top:.5rem">
+          <input type="text" id="verify-code-input" class="form-input" maxlength="6"
+            placeholder="000000" style="font-size:1.5rem;letter-spacing:.3em;text-align:center;font-family:monospace"/>
+          <button class="submit-btn" onclick="verifyCode()" id="verify-btn" style="white-space:nowrap"></button>
+        </div>
+        <div id="verify-status" style="margin-top:.75rem;font-size:13px;display:none"></div>
+        <button onclick="resendCode()" id="resend-btn"
+          style="margin-top:.75rem;background:none;border:none;color:var(--cobalt);font-size:12.5px;cursor:pointer;font-family:inherit;padding:0;text-decoration:underline;display:block"></button>
+      </div>
+
     </div>
   </div>
 </div>
@@ -707,6 +869,10 @@ const I18N = {
     statSub:          'Subspecialties',
     statCensus:       'Census Data',
     gridLabel:        'Select a specialty',
+    searchPlaceholder:'Search for a specialist by name…',
+    searchResults:    'results',
+    searchNoResults:  'No providers found matching',
+    searchNoMuni:     'Municipality not listed',
     subCountSuffix:   'subspecialties',
     statusLive:       '● Data available',
     statusSoon:       '○ Coming soon',
@@ -756,17 +922,34 @@ const I18N = {
     regHeroTitle:     'Provider Registration',
     regHeroSub:       'Complete the form below to register your practice or update your existing listing. Submissions are reviewed before publication.',
     regFormTitle:     'Provider Information',
-    lblFirstname:     'First Name',
-    lblLastname:      'Last Name',
+    lblFirstname:     'First Name ✱',
+    lblLastname:      'Last Name ✱',
     lblNpi:           'NPI Number',
-    lblSpecialty:     'Primary Specialty',
-    lblSubspecialty:  'Subspecialty',
+    lblSpecialty:     'Primary Specialty ✱',
+    lblSubspecialty:  'Subspecialty ✱',
+    hintSubspecialty: 'Select "None" if no subspecialty applies.',
+    lblEconsult:      'I wish to participate in the E-Consult service (when available)',
     lblLocations:     'Practice Location(s)',
     lblWebsite:       'Clinic / Practice Website',
     lblInstagram:     'Instagram Handle',
     lblFlag:          'Flag Outdated Information (optional) — describe what needs to be updated or removed',
     addLocationBtn:   '+ Add another location',
-    submitBtn:        'Submit for Review',
+    submitBtn:        'Send Verification Code',
+    lblEmail:         'Email Address ✱',
+    hintEmail:        'Use the same email registered with the Colegio Médico de Puerto Rico. This will be used only to send a one-time authentication PIN — never for marketing.',
+    lblNewsletter:    'I would like to receive occasional updates and newsletters from PR MedMap (optional)',
+    regRequiredNote:  '✱ Required fields',
+    regPageLabel:     'Provider Registration',
+    regBackLabel:     'Back to Home',
+    verifyTitle:      'Check your email',
+    verifyDesc:       'We sent a 6-digit verification code to your email address. Enter it below to complete your registration.',
+    verifyBtn:        'Verify & Submit',
+    resendBtn:        'Resend code',
+    verifySuccess:    '✓ Verified! Your information has been submitted for review.',
+    verifyErr:        'Incorrect code. Please try again.',
+    verifyErrExpired: 'Code expired. Please request a new one.',
+    submitMissingFields: 'Please fill in all required fields: First Name, Last Name, Email, Primary Specialty, Subspecialty, and at least one practice location.',
+    submitOk:         'Verification code sent! Check your email.',
     submitOk:         '✓ Thank you! Your submission has been received and will be reviewed.',
     submitErr:        'Something went wrong. Please try again.',
     muniLabel:        'Municipality',
@@ -798,6 +981,10 @@ const I18N = {
     statSub:          'Subespecialidades',
     statCensus:       'Datos del censo',
     gridLabel:        'Selecciona una especialidad',
+    searchPlaceholder:'Busca un especialista por nombre…',
+    searchResults:    'resultados',
+    searchNoResults:  'No se encontraron proveedores que coincidan con',
+    searchNoMuni:     'Municipio no registrado',
     subCountSuffix:   'subespecialidades',
     statusLive:       '● Datos disponibles',
     statusSoon:       '○ Próximamente',
@@ -847,17 +1034,34 @@ const I18N = {
     regHeroTitle:     'Registro de Proveedores',
     regHeroSub:       'Completa el formulario para registrar tu práctica o actualizar tu listado existente. Los envíos son revisados antes de publicarse.',
     regFormTitle:     'Información del Proveedor',
-    lblFirstname:     'Nombre',
-    lblLastname:      'Apellido',
+    lblFirstname:     'Nombre ✱',
+    lblLastname:      'Apellido ✱',
     lblNpi:           'Número NPI',
-    lblSpecialty:     'Especialidad Primaria',
-    lblSubspecialty:  'Subespecialidad',
+    lblSpecialty:     'Especialidad Primaria ✱',
+    lblSubspecialty:  'Subespecialidad ✱',
+    hintSubspecialty: 'Selecciona "Ninguna" si no aplica subespecialidad.',
+    lblEconsult:      'Deseo participar en el servicio de E-Consulta (cuando esté disponible)',
     lblLocations:     'Lugar(es) de Práctica',
     lblWebsite:       'Sitio Web de la Clínica / Práctica',
     lblInstagram:     'Usuario de Instagram',
     lblFlag:          'Marcar Información Desactualizada (opcional) — describe qué necesita actualizarse o eliminarse',
     addLocationBtn:   '+ Añadir otra ubicación',
-    submitBtn:        'Enviar para Revisión',
+    submitBtn:        'Enviar Código de Verificación',
+    lblEmail:         'Correo Electrónico ✱',
+    hintEmail:        'Usa el mismo correo registrado en el Colegio Médico de Puerto Rico. Solo se usará para enviar un PIN de autenticación — nunca para mercadeo.',
+    lblNewsletter:    'Deseo recibir actualizaciones y boletines de PR MedMap (opcional)',
+    regRequiredNote:  '✱ Campos requeridos',
+    regPageLabel:     'Registro de Proveedores',
+    regBackLabel:     'Volver al Inicio',
+    verifyTitle:      'Revisa tu correo',
+    verifyDesc:       'Enviamos un código de verificación de 6 dígitos a tu correo. Ingrésalo a continuación para completar tu registro.',
+    verifyBtn:        'Verificar y Enviar',
+    resendBtn:        'Reenviar código',
+    verifySuccess:    '✓ ¡Verificado! Tu información ha sido enviada para revisión.',
+    verifyErr:        'Código incorrecto. Por favor intenta de nuevo.',
+    verifyErrExpired: 'Código expirado. Solicita uno nuevo.',
+    submitMissingFields: 'Por favor completa los campos requeridos: Nombre, Apellido, Correo, Especialidad, Subespecialidad y al menos una ubicación de práctica.',
+    submitOk:         '¡Código de verificación enviado! Revisa tu correo.',
     submitOk:         '✓ ¡Gracias! Tu envío ha sido recibido y será revisado.',
     submitErr:        'Algo salió mal. Por favor intenta de nuevo.',
     muniLabel:        'Municipio',
@@ -900,11 +1104,26 @@ function setLang(lang) {
   // update all static strings
   applyStaticStrings();
 
-  // re-render dynamic content if specialty is open
-  if (currentSP) {
+  // re-render dynamic content based on current section
+  const artDetailPage = document.getElementById('article-detail-page');
+  if (artDetailPage && artDetailPage.style.display !== 'none') {
+    // Re-render open article in new language
+    const body = document.getElementById('article-detail-body');
+    if (body && body.dataset.articleId) {
+      const aid = body.dataset.articleId;
+      if (aid === 'physician-ratios') body.innerHTML = buildPhysicianRatiosArticle();
+      setTimeout(() => {
+        document.querySelectorAll('.art-bar-fill').forEach(bar => {
+          bar.style.width = bar.dataset.width || '0%';
+        });
+      }, 80);
+    }
+    buildArticlesGrid(); // also update articles list
+  } else if (currentSP) {
     openSpecialty(currentSP.id, true);
   } else {
     rebuildGrid();
+    buildArticlesGrid();
   }
 }
 
@@ -919,6 +1138,8 @@ function applyStaticStrings() {
   document.getElementById('stat-sub').textContent         = t('statSub');
   document.getElementById('stat-census').textContent      = t('statCensus');
   document.getElementById('grid-label').textContent       = t('gridLabel');
+  const si = document.getElementById('provider-search');
+  if(si) si.placeholder = t('searchPlaceholder');
   // filter-label is managed by buildSubFilterBar
   document.getElementById('map-card-title').textContent   = t('mapTitle');
   document.getElementById('map-hint').textContent         = t('mapHint');
@@ -953,6 +1174,21 @@ function applyStaticStrings() {
   abt('lbl-website','lblWebsite'); abt('lbl-instagram','lblInstagram');
   abt('lbl-flag','lblFlag'); abt('add-location-btn','addLocationBtn');
   abt('submit-btn','submitBtn');
+  abt('lbl-email','lblEmail');
+  abt('reg-required-note','regRequiredNote');
+  abt('reg-page-label','regPageLabel');
+  abt('reg-back-label','regBackLabel');
+  abt('verify-title','verifyTitle');
+  abt('verify-desc','verifyDesc');
+  abt('verify-btn','verifyBtn');
+  abt('resend-btn','resendBtn');
+  abt('lbl-newsletter','lblNewsletter');
+  const he = document.getElementById('hint-email');
+  if(he) he.textContent = t('hintEmail');
+  const hse = document.getElementById('hint-subspecialty');
+  if(hse) hse.textContent = t('hintSubspecialty');
+  const lec = document.getElementById('lbl-econsult');
+  if(lec) lec.textContent = t('lblEconsult');
   populateRegisterDropdowns();
   buildArticlesGrid();
 }
@@ -988,9 +1224,9 @@ const SHARED_SUBS = {
 // ════════════════════════════════════════════════════════════════
 const SPECIALTIES = [
   {id:"general-medicine",
-   name:{en:"General Medicine",es:"Medicina General"},
+   name:{en:"General Medicine / General Physician",es:"Medicina General / Médico General"},
    icon:"🏥",available:false,
-   subs:["General Practice","Family Medicine","Internal Medicine","General Physician"]},
+   subs:["General Physician","General Practice","Family Medicine","Internal Medicine"]},
 
   {id:"allergy-immunology",
    name:{en:"Allergy & Immunology",es:"Alergia e Inmunología"},
@@ -1462,7 +1698,8 @@ function openNoMuniProfile(idx) {
     '<div class="prof-tag">'+profTag+'</div>' +
     '<div class="prof-section-label">'+(LANG==='en'?'Municipality':'Municipio')+'</div>' +
     '<div style="font-size:13px;color:var(--muted);padding:4px 0;">'+(LANG==='en'?'Not on record':'No registrado')+'</div>' +
-    '<div class="prof-links"><div class="prof-no-links">'+t('profNoLinks')+'</div></div>';
+    '<div class="prof-links"><div class="prof-no-links">'+t('profNoLinks')+'</div></div>'+
+    econsultButtonHTML();
   document.getElementById('profile-panel').classList.add('open');
 }
 
@@ -1744,7 +1981,8 @@ function openProfile(idx,muni){
     '<div class="prof-munis">'+muniTags+'</div>'+
     officeNote+
     '<div class="prof-section-label">'+(isMulti?t('profContactAt')+' '+muni:t('profContact'))+'</div>'+
-    '<div class="prof-links">'+(links.length?links.join(''):'<div class="prof-no-links">'+t('profNoLinks')+'</div>')+'</div>';
+    '<div class="prof-links">'+(links.length?links.join(''):'<div class="prof-no-links">'+t('profNoLinks')+'</div>')+'</div>' +
+    econsultButtonHTML();
   document.getElementById('profile-panel').classList.add('open');
 }
 
@@ -1840,6 +2078,7 @@ function buildArticlesGrid() {
 function openArticle(id) {
   showSection('article-detail');
   const body = document.getElementById('article-detail-body');
+  body.dataset.articleId = id; // store so setLang can re-render it
   if(id==='physician-ratios') body.innerHTML = buildPhysicianRatiosArticle();
   setTimeout(()=>{
     document.querySelectorAll('.art-bar-fill').forEach(bar=>{
@@ -1954,7 +2193,12 @@ function updateSubspecialtyDropdown() {
   const subSel = document.getElementById('reg-subspecialty');
   if(!spSel||!subSel) return;
   const sp = SPECIALTIES.find(s=>s.id===spSel.value);
-  subSel.innerHTML = '<option value="">—</option>';
+  subSel.innerHTML = '';
+  // "None" is always the first option — required field, so no blank default
+  const noneOpt = document.createElement('option');
+  noneOpt.value = 'none';
+  noneOpt.textContent = LANG==='en' ? 'None (no subspecialty)' : 'Ninguna (sin subespecialidad)';
+  subSel.appendChild(noneOpt);
   (sp ? sp.subs || [] : []).forEach(sub => {
     const opt=document.createElement('option'); opt.value=sub; opt.textContent=sub; subSel.appendChild(opt);
   });
@@ -1986,36 +2230,704 @@ function removeLocation(id) {
 
 
 
+
+// ════════════════════════════════════════════════════════════════
+//  REGISTRATION — email verification flow
+// ════════════════════════════════════════════════════════════════
+
+// Simple 6-digit code stored in memory (no backend — simulated for now)
+let _pendingCode     = null;
+let _pendingPayload  = null;
+let _codeExpiry      = null;
+const CODE_TTL_MS    = 10 * 60 * 1000; // 10 minutes
+
+function generateCode() {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
+// Simulate sending an email — in production replace with a backend POST
+function simulateSendEmail(email, code) {
+  // Log to console so you can test during development
+  console.log('[PR MedMap] Verification code for', email, '→', code);
+  // When a real backend is wired up, POST { email, code } here
+}
+
 function submitRegistration() {
-  const payload={
-    npi:document.getElementById('reg-npi').value,
-    firstName:document.getElementById('reg-firstname').value,
-    lastName:document.getElementById('reg-lastname').value,
-    specialty:document.getElementById('reg-specialty').value,
-    subspecialty:document.getElementById('reg-subspecialty').value,
-    website:document.getElementById('reg-website').value,
-    instagram:document.getElementById('reg-instagram').value,
-    flag:document.getElementById('reg-flag').value,
-    locations:[],submittedAt:new Date().toISOString()
-  };
-  for(let i=1;i<=locationCount;i++){
-    const mu=document.getElementById(`loc-muni-${i}`);
-    const zp=document.getElementById(`loc-zip-${i}`);
-    if(mu&&mu.value) payload.locations.push({municipality:mu.value,zip:zp?zp.value:''});
+  const firstName = document.getElementById('reg-firstname').value.trim();
+  const lastName  = document.getElementById('reg-lastname').value.trim();
+  const email     = document.getElementById('reg-email').value.trim();
+
+  const specialty    = document.getElementById('reg-specialty').value;
+  const subspecialty = document.getElementById('reg-subspecialty').value;
+
+  // Validate mandatory fields
+  const locInputs = document.querySelectorAll('#locations-list select[id^="loc-muni-"]');
+  const hasMuni   = Array.from(locInputs).some(el => el.value);
+
+  if (!firstName || !lastName || !email || !specialty || !subspecialty || !hasMuni) {
+    const st = document.getElementById('submit-status');
+    st.style.display = 'block';
+    st.className = 'submit-status err';
+    st.textContent = t('submitMissingFields');
+    return;
   }
-  try{const s=JSON.parse(localStorage.getItem('prmedmap_submissions')||'[]');s.push(payload);localStorage.setItem('prmedmap_submissions',JSON.stringify(s));}catch(e){}
-  const statusEl=document.getElementById('submit-status');
-  statusEl.style.display='block'; statusEl.className='submit-status ok'; statusEl.textContent=t('submitOk');
-  statusEl.scrollIntoView({behavior:'smooth'});
+
+  // Collect full payload
+  const payload = {
+    firstName, lastName, email,
+    npi:          document.getElementById('reg-npi').value.trim(),
+    specialty:    specialty,
+    subspecialty: subspecialty,
+    econsent:     document.getElementById('reg-econsult') ? document.getElementById('reg-econsult').checked : false,
+    website:      document.getElementById('reg-website').value.trim(),
+    instagram:    document.getElementById('reg-instagram').value.trim(),
+    flag:         document.getElementById('reg-flag').value.trim(),
+    newsletter:   document.getElementById('reg-newsletter').checked,
+    locations:    [],
+    submittedAt:  new Date().toISOString(),
+    status:       'pending_verification',
+  };
+
+  for (let i = 1; i <= locationCount; i++) {
+    const mu = document.getElementById('loc-muni-' + i);
+    const zp = document.getElementById('loc-zip-' + i);
+    if (mu && mu.value) payload.locations.push({ municipality: mu.value, zip: zp ? zp.value : '' });
+  }
+
+  // Generate and "send" verification code
+  _pendingCode    = generateCode();
+  _pendingPayload = payload;
+  _codeExpiry     = Date.now() + CODE_TTL_MS;
+  simulateSendEmail(email, _pendingCode);
+
+  // Show verification step
+  document.getElementById('register-form-card').style.display = 'none';
+  const vc = document.getElementById('verify-card');
+  vc.style.display = 'block';
+
+  const desc = document.getElementById('verify-desc');
+  if (desc) desc.textContent = t('verifyDesc') + ' (' + email + ')';
+
+  const st = document.getElementById('submit-status');
+  st.style.display = 'block';
+  st.className = 'submit-status ok';
+  st.textContent = t('submitOk');
+}
+
+function verifyCode() {
+  const entered = (document.getElementById('verify-code-input').value || '').trim();
+  const vs = document.getElementById('verify-status');
+  vs.style.display = 'block';
+
+  if (Date.now() > _codeExpiry) {
+    vs.style.cssText = 'color:#991b1b;font-size:13px;display:block';
+    vs.textContent = t('verifyErrExpired');
+    return;
+  }
+
+  if (entered !== _pendingCode) {
+    vs.style.cssText = 'color:#991b1b;font-size:13px;display:block';
+    vs.textContent = t('verifyErr');
+    // Shake the input
+    const inp = document.getElementById('verify-code-input');
+    inp.style.transition = 'transform .08s';
+    [0,1,2,3].forEach(i => setTimeout(() => { inp.style.transform = i%2?'translateX(5px)':'translateX(-5px)'; }, i*80));
+    setTimeout(() => { inp.style.transform = ''; }, 360);
+    return;
+  }
+
+  // ── Code correct — process registration ──────────────────────────────────
+  vs.style.cssText = 'color:#14532d;font-size:13px;display:block';
+  vs.textContent = t('verifySuccess');
+  document.getElementById('verify-btn').disabled = true;
+
+  const payload = _pendingPayload;
+  payload.status = 'verified';
+  payload.verifiedAt = new Date().toISOString();
+  payload.lastUpdated = new Date().toISOString();
+
+  // Save to localStorage registry
+  const registry = JSON.parse(localStorage.getItem('prmedmap_registry') || '[]');
+
+  // Check if provider already exists in our dataset
+  const matchResult = matchProviderToDataset(payload);
+  if (matchResult) {
+    payload.matchedEntry = matchResult;
+    payload.isUpdate = true;
+  } else {
+    payload.isNew = true;
+  }
+
+  // Check for flagged fields
+  if (payload.flag) payload.hasFlaggedInfo = true;
+
+  registry.push(payload);
+  localStorage.setItem('prmedmap_registry', JSON.stringify(registry));
+
+  // Clear pending state
+  _pendingCode = null; _pendingPayload = null;
+}
+
+function resendCode() {
+  if (!_pendingPayload) return;
+  _pendingCode  = generateCode();
+  _codeExpiry   = Date.now() + CODE_TTL_MS;
+  simulateSendEmail(_pendingPayload.email, _pendingCode);
+  const vs = document.getElementById('verify-status');
+  vs.style.cssText = 'color:var(--cobalt);font-size:13px;display:block';
+  vs.textContent = t('submitOk');
+}
+
+// Match a submitted payload against the existing SPECIALTY_DATA dataset
+function matchProviderToDataset(payload) {
+  const nameLower = (payload.firstName + ' ' + payload.lastName).toLowerCase();
+  for (const [spId, spData] of Object.entries(SPECIALTY_DATA)) {
+    for (const [subName, subData] of Object.entries(spData.subs || {})) {
+      for (const [muni, docs] of Object.entries(subData.doctors || {})) {
+        for (const doc of docs) {
+          const docLower = doc.name.toLowerCase().replace(/^(dr\.|dra\.)\s*/,'');
+          if (docLower.includes(nameLower) || nameLower.includes(docLower.split(' ')[0])) {
+            return { spId, subName, muni, doc };
+          }
+        }
+      }
+    }
+  }
+  return null;
+}
+
+// ════════════════════════════════════════════════════════════════
+//  ADMIN PANEL
+// ════════════════════════════════════════════════════════════════
+const ADMIN_PW = 'HEALTHYPFKNR';
+let adminUnlocked = false;
+
+function openAdmin() {
+  document.getElementById('admin-overlay').style.display = 'flex';
+  if (!adminUnlocked) {
+    document.getElementById('admin-login').style.display = 'flex';
+    document.getElementById('admin-data').style.display  = 'none';
+    setTimeout(() => { const el = document.getElementById('admin-pw-input'); if(el) el.focus(); }, 100);
+  } else {
+    showAdminData();
+  }
+}
+
+function closeAdmin() {
+  document.getElementById('admin-overlay').style.display = 'none';
+}
+
+function checkAdminPw() {
+  const val = document.getElementById('admin-pw-input').value;
+  if (val === ADMIN_PW) {
+    adminUnlocked = true;
+    document.getElementById('admin-pw-err').style.display = 'none';
+    document.getElementById('admin-pw-input').value = '';
+    showAdminData();
+  } else {
+    document.getElementById('admin-pw-err').style.display = 'block';
+    document.getElementById('admin-pw-input').select();
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeAdmin();
+    closeSidebar();
+  }
+  if (document.getElementById('admin-login').style.display !== 'none' &&
+      document.getElementById('admin-pw-input') === document.activeElement &&
+      e.key === 'Enter') checkAdminPw();
+});
+
+function showAdminData() {
+  document.getElementById('admin-login').style.display = 'none';
+  const dd = document.getElementById('admin-data');
+  dd.style.display = 'flex';
+
+  // Populate specialty filter
+  const spSel = document.getElementById('admin-sp-filter');
+  spSel.innerHTML = '<option value="">All Specialties</option>';
+  SPECIALTIES.filter(s => s.available).forEach(sp => {
+    const opt = document.createElement('option');
+    opt.value = sp.id;
+    opt.textContent = typeof sp.name === 'object' ? (sp.name.en || sp.name.es) : sp.name;
+    spSel.appendChild(opt);
+  });
+
+  // Add "Submitted Registrations" option
+  const regOpt = document.createElement('option');
+  regOpt.value = '__registry__';
+  regOpt.textContent = '⭐ Submitted Registrations';
+  spSel.appendChild(regOpt);
+
+  renderAdminTable();
+}
+
+function renderAdminTable() {
+  const spFilter    = document.getElementById('admin-sp-filter').value;
+  const nameFilter  = (document.getElementById('admin-search').value || '').toLowerCase();
+  const thead       = document.getElementById('admin-thead');
+  const tbody       = document.getElementById('admin-tbody');
+  const countEl     = document.getElementById('admin-count');
+
+  // ── Show submitted registrations ─────────────────────────────────────────
+  if (spFilter === '__registry__') {
+    const registry = JSON.parse(localStorage.getItem('prmedmap_registry') || '[]');
+    thead.innerHTML = '<tr>' +
+      ['Name','Email','Specialty','Subspecialty','Locations','NPI','Website','Instagram','Flag','Newsletter','Status','Last Updated','Match'].map(h =>
+        '<th>' + h + '</th>').join('') + '</tr>';
+
+    tbody.innerHTML = '';
+    const rows = registry.filter(r => !nameFilter || (r.firstName + ' ' + r.lastName).toLowerCase().includes(nameFilter));
+    countEl.textContent = rows.length + ' submissions';
+
+    rows.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.className = r.hasFlaggedInfo ? 'admin-flag' : (r.isNew ? 'admin-new' : '');
+      const sp = SPECIALTIES.find(s => s.id === r.specialty);
+      const spName = sp ? (typeof sp.name === 'object' ? sp.name.en : sp.name) : r.specialty;
+      const locs = (r.locations || []).map(l => l.municipality + (l.zip ? ' ' + l.zip : '')).join('; ');
+      const cells = [
+        r.firstName + ' ' + r.lastName,
+        r.email || '',
+        spName || '',
+        r.subspecialty || '',
+        locs,
+        r.npi || '',
+        r.website || '',
+        r.instagram || '',
+        r.flag ? '⚠ ' + r.flag : '',
+        r.newsletter ? '✓' : '',
+        r.status || '',
+        r.lastUpdated ? r.lastUpdated.slice(0,10) : '',
+        r.matchedEntry ? '✓ ' + r.matchedEntry.doc.name : (r.isNew ? '🆕 New' : ''),
+      ];
+      tr.innerHTML = cells.map(c => '<td>' + (c || '—') + '</td>').join('');
+      tbody.appendChild(tr);
+    });
+    return;
+  }
+
+  // ── Show specialty dataset ────────────────────────────────────────────────
+  thead.innerHTML = '<tr>' +
+    ['Name','Specialty','Subspecialty','Municipality','Website','Instagram','NPI','Last Updated','Flag'].map(h =>
+      '<th>' + h + '</th>').join('') + '</tr>';
+  tbody.innerHTML = '';
+
+  let count = 0;
+  const registry = JSON.parse(localStorage.getItem('prmedmap_registry') || '[]');
+  const regByName = {};
+  registry.forEach(r => {
+    const key = (r.firstName + ' ' + r.lastName).toLowerCase();
+    regByName[key] = r;
+  });
+
+  const spsToShow = spFilter
+    ? SPECIALTIES.filter(s => s.id === spFilter && s.available)
+    : SPECIALTIES.filter(s => s.available);
+
+  spsToShow.forEach(sp => {
+    const spData = SPECIALTY_DATA[sp.id];
+    if (!spData) return;
+    const spName = typeof sp.name === 'object' ? (sp.name.en || sp.name.es) : sp.name;
+
+    Object.entries(spData.subs || {}).forEach(([subName, subData]) => {
+      // Muni doctors
+      Object.entries(subData.doctors || {}).forEach(([muni, docs]) => {
+        docs.forEach(doc => {
+          if (nameFilter && !doc.name.toLowerCase().includes(nameFilter)) return;
+          const regEntry = regByName[doc.name.toLowerCase().replace(/^(dr\.|dra\.)\s*/,'')];
+          const hasFlaggedInfo = regEntry && regEntry.hasFlaggedInfo;
+          const tr = document.createElement('tr');
+          tr.className = hasFlaggedInfo ? 'admin-flag' : '';
+          const lastUpdated = regEntry ? (regEntry.lastUpdated || '').slice(0,10) : '—';
+          const flagNote = regEntry && regEntry.flag ? '⚠ ' + regEntry.flag : '';
+          const cells = [
+            doc.name,
+            spName,
+            subName,
+            muni,
+            doc.website || '',
+            doc.instagram || '',
+            doc.npi || (regEntry ? regEntry.npi : '') || '',
+            lastUpdated,
+            flagNote,
+          ];
+          tr.innerHTML = cells.map(c => '<td>' + (c || '—') + '</td>').join('');
+          tbody.appendChild(tr);
+          count++;
+        });
+      });
+      // No-muni doctors
+      (subData.no_muni || []).forEach(doc => {
+        if (nameFilter && !doc.name.toLowerCase().includes(nameFilter)) return;
+        const tr = document.createElement('tr');
+        const cells = [doc.name, spName, subName, '(no municipality)', doc.website||'', doc.instagram||'', '', '—', ''];
+        tr.innerHTML = cells.map(c => '<td>' + (c||'—') + '</td>').join('');
+        tbody.appendChild(tr);
+        count++;
+      });
+    });
+  });
+
+  countEl.textContent = count + ' providers';
+}
+
+function exportAdminCSV() {
+  const rows = [
+    ...Array.from(document.getElementById('admin-thead').querySelectorAll('th')).map(th => th.textContent)
+  ];
+  const header = rows.join(',');
+  const bodyRows = Array.from(document.getElementById('admin-tbody').querySelectorAll('tr')).map(tr =>
+    Array.from(tr.querySelectorAll('td')).map(td => '"' + td.textContent.replace(/"/g, '""') + '"').join(',')
+  );
+  const csv = [header, ...bodyRows].join('\n');
+  const blob = new Blob([csv], {type: 'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'prmedmap_providers_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+// ════════════════════════════════════════════════════════════════
+//  E-CONSULT button — added to every profile panel render
+// ════════════════════════════════════════════════════════════════
+function econsultButtonHTML() {
+  return '<button class="econsult-btn" disabled>' +
+    '<span>💬</span><span>' + (LANG === 'en' ? 'E-Consult (Coming Soon)' : 'E-Consulta (Próximamente)') + '</span>' +
+    '</button>';
+}
+
+
+
+
+// ════════════════════════════════════════════════════════════════
+//  GLOBAL PROVIDER SEARCH
+//  Builds a flat index of every doctor across all specialties/subs/munis
+//  at startup so search is instant with no data traversal on keypress.
+// ════════════════════════════════════════════════════════════════
+let PROVIDER_INDEX = [];  // [{name, initials, specialty, spId, subName, municipalities, doc}]
+
+function buildProviderIndex() {
+  PROVIDER_INDEX = [];
+  const seen = new Set(); // deduplicate by name+spId
+
+  Object.entries(SPECIALTY_DATA).forEach(([spId, spData]) => {
+    const sp = SPECIALTIES.find(s => s.id === spId);
+    if (!sp) return;
+    const spName = typeof sp.name === 'object' ? sp.name : {en: sp.name, es: sp.name};
+
+    Object.entries(spData.subs || {}).forEach(([subName, subData]) => {
+      // Doctors with municipalities
+      Object.entries(subData.doctors || {}).forEach(([muni, docs]) => {
+        docs.forEach(doc => {
+          const key = doc.name + '|' + spId;
+          if (seen.has(key)) return;
+          seen.add(key);
+          PROVIDER_INDEX.push({
+            name:         doc.name,
+            nameLower:    doc.name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''),
+            initials:     doc.name.replace(/^(Dr\.|Dra\.)\s*/i,'').split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase(),
+            spId,
+            spName,
+            subName,
+            municipalities: doc.municipalities && doc.municipalities.length > 0 ? doc.municipalities : [muni],
+            doc,
+            noMuni: false,
+          });
+        });
+      });
+      // Doctors without municipalities
+      (subData.no_muni || []).forEach(doc => {
+        const key = doc.name + '|' + spId;
+        if (seen.has(key)) return;
+        seen.add(key);
+        PROVIDER_INDEX.push({
+          name:         doc.name,
+          nameLower:    doc.name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''),
+          initials:     doc.name.replace(/^(Dr\.|Dra\.)\s*/i,'').split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase(),
+          spId,
+          spName,
+          subName,
+          municipalities: [],
+          doc,
+          noMuni: true,
+        });
+      });
+    });
+  });
+}
+
+function normalizeQuery(q) {
+  return q.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').trim();
+}
+
+function highlightMatch(name, query) {
+  if (!query) return name;
+  const idx = name.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return name;
+  return name.slice(0, idx) +
+    '<mark>' + name.slice(idx, idx + query.length) + '</mark>' +
+    name.slice(idx + query.length);
+}
+
+function runSearch(rawQuery) {
+  const dropdown = document.getElementById('search-dropdown');
+  if (!rawQuery || rawQuery.length < 2) {
+    dropdown.classList.remove('open');
+    dropdown.innerHTML = '';
+    return;
+  }
+
+  const q = normalizeQuery(rawQuery);
+  const results = PROVIDER_INDEX.filter(p => p.nameLower.includes(q));
+  // Sort: name starts with query first, then alphabetical
+  results.sort((a, b) => {
+    const aStart = a.nameLower.startsWith(q) ? 0 : 1;
+    const bStart = b.nameLower.startsWith(q) ? 0 : 1;
+    return aStart - bStart || a.name.localeCompare(b.name);
+  });
+
+  dropdown.innerHTML = '';
+
+  if (results.length === 0) {
+    dropdown.innerHTML = `<div class="search-no-results">${t('searchNoResults')} "<strong>${rawQuery}</strong>"</div>`;
+    dropdown.classList.add('open');
+    return;
+  }
+
+  const countEl = document.createElement('div');
+  countEl.className = 'search-result-count';
+  countEl.textContent = results.length + ' ' + t('searchResults');
+  dropdown.appendChild(countEl);
+
+  const MAX_SHOW = 40;
+  results.slice(0, MAX_SHOW).forEach(entry => {
+    const item = document.createElement('div');
+    item.className = 'search-result-item';
+
+    const spLabel = typeof entry.spName === 'object'
+      ? (entry.spName[LANG] || entry.spName.en)
+      : entry.spName;
+    const muniText = entry.noMuni
+      ? t('searchNoMuni')
+      : (entry.municipalities.slice(0, 2).join(', ') + (entry.municipalities.length > 2 ? ' +' + (entry.municipalities.length - 2) : ''));
+
+    item.innerHTML =
+      `<div class="search-result-avatar">${entry.initials}</div>` +
+      `<div class="search-result-info">` +
+        `<div class="search-result-name">${highlightMatch(entry.name, rawQuery)}</div>` +
+        `<div class="search-result-meta">${spLabel}${entry.subName !== spLabel ? ' · ' + entry.subName : ''}</div>` +
+      `</div>` +
+      `<div class="search-result-muni">${muniText || t('searchNoMuni')}</div>`;
+
+    item.addEventListener('click', () => openSearchResult(entry, rawQuery));
+    dropdown.appendChild(item);
+  });
+
+  if (results.length > MAX_SHOW) {
+    const more = document.createElement('div');
+    more.className = 'search-no-results';
+    more.style.borderTop = '1px solid var(--border)';
+    more.textContent = `Showing ${MAX_SHOW} of ${results.length} — refine your search for more specific results.`;
+    dropdown.appendChild(more);
+  }
+
+  dropdown.classList.add('open');
+}
+
+function openSearchResult(entry, query) {
+  // Close dropdown and clear search
+  const dropdown = document.getElementById('search-dropdown');
+  const input    = document.getElementById('provider-search');
+  dropdown.classList.remove('open');
+  if (input) input.value = '';
+
+  const sp = SPECIALTIES.find(s => s.id === entry.spId);
+  if (!sp) return;
+
+  if (sp.available) {
+    // Open the specialty map, then after it renders open the doctor's sidebar
+    currentSubFilter = entry.subName || '__all__';
+    openSpecialty(sp.id, false);
+
+    // Wait for map to render, then open the municipality sidebar and profile
+    const muni = entry.municipalities && entry.municipalities[0];
+    setTimeout(() => {
+      if (muni) {
+        // Open the sidebar for that municipality
+        openSidebar(muni);
+        // Find the doctor in the doc-list and open their profile
+        setTimeout(() => {
+          const docList = document.getElementById('doc-list');
+          const items = docList ? docList.querySelectorAll('.doc-item') : [];
+          let targetIdx = -1;
+          Array.from(items).forEach((item, i) => {
+            if (item.querySelector('.doc-name') &&
+                item.querySelector('.doc-name').textContent.trim() === entry.doc.name) {
+              targetIdx = i;
+            }
+          });
+          if (targetIdx >= 0) {
+            items[targetIdx].click();
+          } else {
+            // Doctor not in sidebar list (e.g. sub-filter mismatch) — show profile directly
+            openSearchProfile(entry);
+          }
+        }, 120);
+      } else {
+        // No municipality — show profile directly on the map page
+        currentSP = sp;
+        openSearchProfile(entry);
+      }
+    }, 800); // allow map + sidebar to render
+  } else {
+    // Specialty not yet available — show profile directly on homepage
+    currentSP = sp;
+    currentSubFilter = entry.subName || '__all__';
+    openSearchProfile(entry);
+  }
+}
+
+function openSearchProfile(entry) {
+  const doc = entry.doc;
+  const ini = entry.initials;
+  const sp  = SPECIALTIES.find(s => s.id === entry.spId);
+  if (!sp) return;
+
+  const spLabel = typeof sp.name === 'object' ? (sp.name[LANG] || sp.name.en) : sp.name;
+  const profTag = typeof sp.profTag === 'object'
+    ? (sp.profTag[LANG] || sp.profTag.en)
+    : (sp.profTag || spLabel + ' · Puerto Rico');
+
+  const munis   = (doc.municipalities || []).filter(Boolean);
+  const muniTags = munis.length > 0
+    ? munis.map(m => `<span class="prof-muni-tag">${m}</span>`).join('')
+    : `<span class="prof-muni-tag" style="color:var(--muted);border-style:dashed">${t('searchNoMuni')}</span>`;
+
+  // Links
+  const links = [];
+  const ws = doc.website, so = doc.social, ig = doc.instagram;
+  if (ws) links.push(
+    `<a class="prof-link" href="${ws}" target="_blank" rel="noopener">` +
+    `<span class="prof-link-icon">&#127760;</span>` +
+    `<div class="prof-link-text"><span class="prof-link-label">${t('profWebsite')}</span>` +
+    `<span class="prof-link-val">${ws.replace(/^https?:\/\//, '').replace(/\/.*$/, '')}</span></div>` +
+    `<span class="prof-ext">&#8599;</span></a>`
+  );
+  if (so && so.includes('instagram.com')) {
+    const handle = ig && ig.startsWith('@') ? ig : ('@' + so.replace(/.*instagram\.com\//, '').replace(/\/$/, ''));
+    links.push(
+      `<a class="prof-link" href="${so}" target="_blank" rel="noopener">` +
+      `<span class="prof-link-icon">&#128247;</span>` +
+      `<div class="prof-link-text"><span class="prof-link-label">Instagram</span>` +
+      `<span class="prof-link-val">${handle}</span></div>` +
+      `<span class="prof-ext">&#8599;</span></a>`
+    );
+  }
+  if (so && so.includes('facebook.com')) links.push(
+    `<a class="prof-link" href="${so}" target="_blank" rel="noopener">` +
+    `<span class="prof-link-icon">&#128101;</span>` +
+    `<div class="prof-link-text"><span class="prof-link-label">Facebook</span>` +
+    `<span class="prof-link-val">Ver perfil</span></div>` +
+    `<span class="prof-ext">&#8599;</span></a>`
+  );
+
+  const subDisplay = entry.subName && entry.subName !== spLabel ? entry.subName : '';
+
+  document.getElementById('prof-body').innerHTML =
+    `<div class="prof-avatar">${ini}</div>` +
+    `<div class="prof-name">${doc.name}</div>` +
+    `<div class="prof-tag">${profTag}${subDisplay ? ' · ' + subDisplay : ''}</div>` +
+    `<div class="prof-section-label">${t('profPractices')}</div>` +
+    `<div class="prof-munis">${muniTags}</div>` +
+    `<div class="prof-section-label">${t('profContact')}</div>` +
+    `<div class="prof-links">${links.length ? links.join('') : '<div class="prof-no-links">' + t('profNoLinks') + '</div>'}</div>` +
+    econsultButtonHTML();
+
+  // Make sure sidebar is visible and profile panel is open
+  // We show the sidebar without needing the map to be open
+  document.getElementById('sb-title').textContent    = doc.name;
+  document.getElementById('sb-subtitle').textContent = spLabel + (subDisplay ? ' · ' + subDisplay : '');
+  document.getElementById('doc-list').innerHTML      = '';
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('main-content').classList.add('sidebar-open');
+  document.getElementById('profile-panel').classList.add('open');
+}
+
+// ── Wire up the search input ──────────────────────────────────────────────────
+function initSearch() {
+  buildProviderIndex();
+
+  const input    = document.getElementById('provider-search');
+  const dropdown = document.getElementById('search-dropdown');
+  if (!input) return;
+
+  input.addEventListener('input', () => runSearch(input.value));
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { dropdown.classList.remove('open'); input.blur(); }
+    if (e.key === 'Enter') {
+      const first = dropdown.querySelector('.search-result-item');
+      if (first) first.click();
+    }
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', e => {
+    if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.classList.remove('open');
+    }
+  });
 }
 
 try {
   applyStaticStrings();
   rebuildGrid();
+  initSearch();
 } catch(err) {
   console.error('PR MedMap init error:', err);
-  // Even if init partially fails, ensure setLang works
 }
 </script>
+
+<!-- ADMIN PANEL -->
+<div id="admin-overlay" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(6,17,46,.85);align-items:center;justify-content:center">
+  <div id="admin-panel" style="background:#fff;border-radius:16px;width:90vw;max-width:1100px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.4)">
+    <div style="background:var(--navy);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+      <div>
+        <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:#fff">Admin Panel</div>
+        <div style="font-size:11px;color:var(--pale);margin-top:2px" id="admin-subtitle">PR MedMap · Provider Registry</div>
+      </div>
+      <button onclick="closeAdmin()" style="background:none;border:none;color:rgba(255,255,255,.7);font-size:24px;cursor:pointer;line-height:1">&#215;</button>
+    </div>
+    <!-- Login screen -->
+    <div id="admin-login" style="padding:2.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;max-width:380px;margin:0 auto;width:100%">
+      <div style="font-size:2rem">🔐</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--ink)">Administrator Access</div>
+      <input type="password" id="admin-pw-input" class="form-input"
+        placeholder="Enter password"
+        style="text-align:center;font-size:1rem;letter-spacing:.15em"
+        onkeydown="if(event.key==='Enter')checkAdminPw()"/>
+      <button class="submit-btn" onclick="checkAdminPw()" style="width:100%">Unlock</button>
+      <div id="admin-pw-err" style="color:#991b1b;font-size:13px;display:none">Incorrect password.</div>
+    </div>
+    <!-- Data view — shown after auth -->
+    <div id="admin-data" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+      <div style="padding:.75rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+        <select id="admin-sp-filter" class="form-input" style="max-width:220px" onchange="renderAdminTable()"></select>
+        <input type="text" id="admin-search" class="form-input" style="max-width:240px" placeholder="Filter by name…" oninput="renderAdminTable()"/>
+        <span id="admin-count" style="font-size:12px;color:var(--muted);margin-left:auto"></span>
+        <button onclick="exportAdminCSV()" style="background:var(--cobalt);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer">⬇ CSV</button>
+        <button onclick="closeAdmin()" style="background:none;border:1px solid var(--border);border-radius:7px;padding:7px 14px;font-family:inherit;font-size:12px;cursor:pointer">Close</button>
+      </div>
+      <div style="overflow:auto;flex:1">
+        <table id="admin-table" style="width:100%;border-collapse:collapse;font-size:12px">
+          <thead id="admin-thead"></thead>
+          <tbody id="admin-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
